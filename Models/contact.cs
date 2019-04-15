@@ -18,7 +18,8 @@ namespace Contact.Models
         public string Name { get; set; }
         [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email format is not valid")]
         public string Email { get; set; }
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Phone Format is not valid")]
+         [RegularExpression("(^05[0-9]{8}$)", ErrorMessage = "Phone Format is not valid")]
+
         public string Phone { get; set; }
 
        

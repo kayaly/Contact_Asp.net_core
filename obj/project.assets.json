@@ -13028,11 +13028,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Abosaoud/Desktop/coop/Contact/Contact.csproj",
+      "projectUniqueName": "/Users/Abosaoud/Desktop/Contact/Contact.csproj",
       "projectName": "Contact",
-      "projectPath": "/Users/Abosaoud/Desktop/coop/Contact/Contact.csproj",
+      "projectPath": "/Users/Abosaoud/Desktop/Contact/Contact.csproj",
       "packagesPath": "/Users/Abosaoud/.nuget/packages/",
-      "outputPath": "/Users/Abosaoud/Desktop/coop/Contact/obj/",
+      "outputPath": "/Users/Abosaoud/Desktop/Contact/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
