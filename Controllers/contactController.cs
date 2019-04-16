@@ -48,12 +48,12 @@ namespace Contact.Controllers
         {
 
 
-        List<Departement> li = new List<Departement>();
-            li= _context.departments.ToList();
-            ViewBag.listofitems=li;
+            List<Departement> li = new List<Departement>();
+            li = _context.departments.ToList();
+            ViewBag.listofitems = li;
             return View();
 
-           
+
         }
 
         // POST: contact/Create
@@ -63,12 +63,32 @@ namespace Contact.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,Name,Email,Phone,Message")] contact contact)
         {
-            if (ModelState.IsValid)
+            var Contact = _context.contact.FirstOrDefault(a => a.Email == contact.Email);
+
+            if ( Contact != null )
             {
+
+                ModelState.AddModelError(string.Empty, "Email already exists");
+                Create();
+            return View();
+               
+            }
+            // else if ( contact.Email==null){
+            //     ModelState.AddModelError(string.Empty, "The Email can not be empty");
+            //     Create();
+            // return View();
+            // }
+            else if (ModelState.IsValid)
+            {
+
                 _context.Add(contact);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
+            
+
             return View(contact);
         }
 

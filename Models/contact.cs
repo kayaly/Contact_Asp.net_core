@@ -16,9 +16,9 @@ namespace Contact.Models
         public int id { get; set; }
         [Required, StringLength(15)]
         public string Name { get; set; }
-        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email format is not valid")]
+        [Required,RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email format is not valid")]
         public string Email { get; set; }
-         [RegularExpression("(^05[0-9]{8}$)", ErrorMessage = "Phone Format is not valid")]
+         [Required,RegularExpression("(^05[0-9]{8}$)", ErrorMessage = "Phone Format is not valid")]
 
         public string Phone { get; set; }
 
