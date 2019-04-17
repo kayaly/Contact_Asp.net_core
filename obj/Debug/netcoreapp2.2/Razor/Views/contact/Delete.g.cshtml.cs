@@ -24,7 +24,7 @@ using Contact.Models;
 #line default
 #line hidden
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"d38175ff8e33bae11117b6be68de0e8168cdbd1b", @"/Views/contact/Delete.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"bdf7272f688626f8639d9d2b927c7840b8c0d369", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"f31b88a2927f495c922b7c30e248c727cb1f999e", @"/Views/_ViewImports.cshtml")]
     public class Views_contact_Delete : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<Contact.Models.contact>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("type", "hidden", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);

@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Contact.Data;
 using Contact.Models;
+using Contact.Models.ContactViewModel;
+
 using System.Text.RegularExpressions;
+using Contact.Pages;
 
 namespace Contact.Controllers
 {
@@ -21,13 +24,16 @@ namespace Contact.Controllers
         }
 
         // GET: contact
-        public async Task<IActionResult> Index(string Serching , bool sensitive )
+        public async Task<IActionResult> Index(string Serching 
+        , bool sensitive,
+          int? pageNumber )
         {
             
 
-            
+           
             if (!string.IsNullOrEmpty(Serching))
             {
+                pageNumber = 1;
                 if (!sensitive){
                 Serching = Serching.ToLower();
                 }
@@ -38,10 +44,39 @@ namespace Contact.Controllers
                 x.Phone.Contains(Serching) ||
                 x.Message.Contains(Serching)).ToListAsync());
             }
-            return View(await _context.contact.ToListAsync());
+
+             int pageSize = 3;
+       
+        return View( PaginatedList<ContactViewModel>.Create(FillContactViewmodel().AsQueryable(), pageNumber ?? 1, pageSize));
 
         }
 
+        public  List<ContactViewModel> FillContactViewmodel( ){
+             List<contact> liContact = new List<contact>();
+             
+             liContact =  _context.contact.ToList();
+
+              List<ContactViewModel> liContactView = new List<ContactViewModel>();
+
+            
+
+              foreach (contact x in liContact)
+              {
+                ContactViewModel contactview = new ContactViewModel();
+                contactview.Name = x.Name ;
+                contactview.Email=x.Email;
+                contactview.Phone=x.Phone;
+                contactview.Message=x.Message;
+                contactview.departement=x.departement;
+                contactview.id=x.id;
+                contactview.DepartementId=x.DepartementId;
+
+                
+                  liContactView.Add(contactview);
+              }
+
+              return liContactView;
+    }
         
         // GET: contact/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -73,6 +108,7 @@ namespace Contact.Controllers
 
 
         }
+
 
         // POST: contact/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
