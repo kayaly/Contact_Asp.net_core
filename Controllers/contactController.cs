@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Contact.Data;
 using Contact.Models;
+using System.Text.RegularExpressions;
 
 namespace Contact.Controllers
 {
@@ -20,11 +21,28 @@ namespace Contact.Controllers
         }
 
         // GET: contact
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Serching , bool sensitive )
         {
+            
+
+            
+            if (!string.IsNullOrEmpty(Serching))
+            {
+                if (!sensitive){
+                Serching = Serching.ToLower();
+                }
+               
+                return View(await _context.contact.Where(x =>
+                x.Name.Contains(Serching)  ||
+                x.Email.Contains(Serching) ||
+                x.Phone.Contains(Serching) ||
+                x.Message.Contains(Serching)).ToListAsync());
+            }
             return View(await _context.contact.ToListAsync());
+
         }
 
+        
         // GET: contact/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -61,23 +79,30 @@ namespace Contact.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Name,Email,Phone,Message")] contact contact)
+        public async Task<IActionResult> Create([Bind("id,Name,Email,Phone,Message,DepartementId")] contact contact)
         {
+
+            contact.departement = _context.departments.FirstOrDefault(a => a.DepartementId == contact.DepartementId);
+
+            if (contact.Email == null)
+            {
+                ModelState.AddModelError(string.Empty, "The Email can not be empty");
+                Create();
+                return View();
+            }
+
+            contact.Email = contact.Email.ToLower();
             var Contact = _context.contact.FirstOrDefault(a => a.Email == contact.Email);
 
-            if ( Contact != null )
+            if (Contact != null)
             {
 
                 ModelState.AddModelError(string.Empty, "Email already exists");
                 Create();
-            return View();
-               
+                return View();
+
             }
-            // else if ( contact.Email==null){
-            //     ModelState.AddModelError(string.Empty, "The Email can not be empty");
-            //     Create();
-            // return View();
-            // }
+
             else if (ModelState.IsValid)
             {
 
@@ -87,7 +112,7 @@ namespace Contact.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            
+
 
             return View(contact);
         }

@@ -31,8 +31,8 @@
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
           <div class="form-group ">
-              <label asp-for="departement" class="control-label">Department</label>
-            <select class="form-control"  asp-for="departement" asp-items="@(new SelectList(@ViewBag.listofitems,"DepartementId","Name"))"  >
+              <label asp-for="DepartementId" class="control-label">Department</label>
+            <select class="form-control"  asp-for="DepartementId" asp-items="@(new SelectList(@ViewBag.listofitems,"DepartementId","Name"))"  >
                 
                  <option selected >--Please Select --</option>
             </select>

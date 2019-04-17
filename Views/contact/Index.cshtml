@@ -9,6 +9,18 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div>
+
+<form  asp-action="Index" asp-controller="contact">
+    <input class="form-control" type="text" name="Serching" >
+    <br>
+    <input  type="submit" class="btn btn-primary" value="Search">
+    <input type="checkbox" name="sensitive" value="true" >case sensitive<br>
+
+</form>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -23,6 +35,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.departement)
             </th>
             <th></th>
         </tr>
@@ -41,6 +56,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.departement.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

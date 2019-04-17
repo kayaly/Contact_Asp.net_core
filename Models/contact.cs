@@ -12,19 +12,23 @@ namespace Contact.Models
 {
     public class contact
     {
-         [Key]
+        [Key]
         public int id { get; set; }
         [Required, StringLength(15)]
         public string Name { get; set; }
-        [Required,RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email format is not valid")]
+        [Required, RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email format is not valid")]
         public string Email { get; set; }
-         [Required,RegularExpression("(^05[0-9]{8}$)", ErrorMessage = "Phone Format is not valid")]
+        [Required, RegularExpression("(^05[0-9]{8}$)", ErrorMessage = "Phone Format is not valid")]
 
         public string Phone { get; set; }
 
-       
+
         [ForeignKey("DepartementId")]
-        public   Departement departement { get; set; }
+        public virtual Departement departement { get; set; }
+
         public string Message { get; set; }
+
+        public int DepartementId { get; set; }
+
     }
 }
