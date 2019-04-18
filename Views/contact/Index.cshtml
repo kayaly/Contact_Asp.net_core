@@ -29,19 +29,24 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model[1].Name)
+                  <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model[1].Name)</a>
+                
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[2].Email)
+                 <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]">@Html.DisplayNameFor(model => model[2].Email)</a>
+              
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[3].Phone)
+                  <a asp-action="Index" asp-route-sortOrder="@ViewData["PhoneSortParm"]">@Html.DisplayNameFor(model => model[3].Phone)</a>
+                
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[5].Message)
+                 <a asp-action="Index" asp-route-sortOrder="@ViewData["MessageSortParm"]">@Html.DisplayNameFor(model => model[5].Message)</a>
+               
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[4].departement)
+                 <a asp-action="Index" asp-route-sortOrder="@ViewData["departementSortParm"]">@Html.DisplayNameFor(model => model[4].departementName)</a>
+            
             </th>
             <th></th>
         </tr>
@@ -62,7 +67,7 @@
                 @Html.DisplayFor(modelItem => item.Message)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.departement.Name)
+                @Html.DisplayFor(modelItem => item.departementName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

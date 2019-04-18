@@ -18,8 +18,8 @@ public int id { get; set; }
 
         public string Phone { get; set; }
 
-        public virtual Departement departement { get; set; }
-
+       
+    public string departementName { get; set; }
         public string Message { get; set; }
 
         public int DepartementId { get; set; }
