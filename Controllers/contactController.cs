@@ -17,7 +17,7 @@ namespace Contact.Controllers
     public class contactController : Controller
     {
         private readonly ContactContext _context;
-         
+
 
         public contactController(ContactContext context)
         {
@@ -32,6 +32,7 @@ namespace Contact.Controllers
           int? pageNumber,
           string sortOrder)
         {
+                  int pageSize = 3;
 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PhoneSortParm"] = sortOrder == "Phone" ? "Phone_desc" : "Phone";
@@ -39,15 +40,23 @@ namespace Contact.Controllers
             ViewData["MessageSortParm"] = sortOrder == "Message" ? "Message_desc" : "Message";
             ViewData["departementSortParm"] = sortOrder == "departement" ? "departement_desc" : "departement";
 
-            // List<contact> contacts = _context.contact.ToList();
 
-// select s.* from contact s
-            var contacts = from contact in _context.contact
-            join departemnt in _context.departments 
-            on contact.DepartementId equals departemnt.DepartementId
-            select contact;
+            var contacts = from c in _context.contact
+                           join d in _context.departments
+                           on c.DepartementId equals d.DepartementId
+                           select new ContactViewModel
+                           {
+                               id = c.id,
+                               Name = c.Name,
+                               Email = c.Email,
+                               Phone = c.Phone,
+                               Message = c.Message,
+                               departementName = d.Name
 
-            
+                           };
+
+
+
             switch (sortOrder)
             {
                 case "name_desc":
@@ -73,10 +82,10 @@ namespace Contact.Controllers
                     contacts = contacts.OrderByDescending(l => l.Message);
                     break;
                 case "departement":
-                    contacts = contacts.OrderBy(l => l.departement);
+                    contacts = contacts.OrderBy(l => l.departementName);
                     break;
                 case "departement_desc":
-                    contacts = contacts.OrderByDescending(l => l.departement);
+                    contacts = contacts.OrderByDescending(l => l.departementName);
                     break;
                 default:
                     contacts = contacts.OrderBy(l => l.Name);
@@ -93,44 +102,45 @@ namespace Contact.Controllers
                     Serching = Serching.ToLower();
                 }
 
-                return View(await contacts.Where(x =>
+        return View(PaginatedList<ContactViewModel>.Create(contacts.Where(x =>
                 x.Name.Contains(Serching) ||
                 x.Email.Contains(Serching) ||
                 x.Phone.Contains(Serching) ||
-                x.Message.Contains(Serching)).ToListAsync());
+                x.Message.Contains(Serching)), pageNumber ?? 1, pageSize));
+                
             }
 
-            int pageSize = 10;
+          
 
-            return View(PaginatedList<ContactViewModel>.Create(FillContactViewmodel(contacts).AsQueryable(), pageNumber ?? 1, pageSize));
+            return View(PaginatedList<ContactViewModel>.Create(contacts, pageNumber ?? 1, pageSize));
 
         }
 
-       
-        public List<ContactViewModel> FillContactViewmodel(IQueryable<contact> IQ)
-        {
+
+        // public List<ContactViewModel> FillContactViewmodel(IQueryable<contact> IQ)
+        // {
 
 
-           
-            List<ContactViewModel> liContactView = new List<ContactViewModel>();
 
-            foreach (contact x in IQ)
-            {
-                ContactViewModel contactview = new ContactViewModel();
-                contactview.Name = x.Name;
-                contactview.Email = x.Email;
-                contactview.Phone = x.Phone;
-                contactview.Message = x.Message;
-                contactview.departementName = x.departement.Name;
-                contactview.id = x.id;
-                contactview.DepartementId = x.DepartementId;
+        //     List<ContactViewModel> liContactView = new List<ContactViewModel>();
+
+        //     foreach (contact x in IQ)
+        //     {
+        //         ContactViewModel contactview = new ContactViewModel();
+        //         contactview.Name = x.Name;
+        //         contactview.Email = x.Email;
+        //         contactview.Phone = x.Phone;
+        //         contactview.Message = x.Message;
+        //         contactview.departementName = x.departement.;
+        //         contactview.id = x.id;
+        //         contactview.DepartementId = x.DepartementId;
 
 
-                liContactView.Add(contactview);
-            }
+        //         liContactView.Add(contactview);
+        //     }
 
-            return liContactView;
-        }
+        //     return liContactView;
+        // }
 
         // GET: contact/Details/5
         public async Task<IActionResult> Details(int? id)
