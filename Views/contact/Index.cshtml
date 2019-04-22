@@ -1,10 +1,16 @@
 
 
-@model Contact.Pages.PaginatedList<Contact.Models.ContactViewModel.ContactViewModel>
+@model Contact.Pages.PaginatedList<Contact.Models.ContactViewModel>
    
 @{
     ViewData["Title"] = "Index";
 }
+
+
+
+
+	
+
 
 <h1>Index</h1>
 
@@ -23,6 +29,64 @@
 </form>
 </div>
 
+<form>
+<div class="row" style=" margin-top: 25px;" >
+    
+
+
+<div class="col-md-3" >
+    <label><h4>First Sort  :</h4></label>
+
+   
+<select class="form-control" id="FirstSorting" name="FirstSorting">
+         <option value="0">Select</a></option> 
+
+    <option value="1">Name</a></option>
+    <option value="2">Email</option>
+    <option value="3">Message</option>
+     <option value="4">Phone</option>
+      <option value="5">Departement Name</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label><h4> Secend Sort  :</h4></label>
+
+<select class="form-control" id="SecondSorting" name="SecondSorting">
+     <option value="0">Select</a></option> 
+    <option value="1">Name</a></option> 
+       <option value="2">Email</option>
+    <option value="3">Message</option>
+     <option value="4">Phone</option>
+      <option value="5">Departement Name</option>
+</select>
+</div>
+
+<div class="col-md-3" >
+    <label><h4>Third Sort :</h4></label>
+
+<select class="form-control" id="ThirdSorting" name="ThirdSorting">
+         <option value="0">Select</a></option> 
+
+    <option value="1">Name</a></option>
+         <option value="2">Email</option>
+    <option value="3">Message</option>
+     <option value="4">Phone</option>
+      <option value="5">Departement Name</option>
+</select>
+
+</div>
+
+<br>
+<br>
+
+
+<div class="col-md-3" >
+  <input   type="submit" class="btn btn-primary" value="Submit" >
+</div>
+
+</div>
+</form>
 
 @if(Model.Count > 0)
 {
@@ -81,7 +145,7 @@
 </table>
 } else 
 {
-    <div>No results found</div>
+    <div><h3 class="alert alrt-danger">No results found</h3></div>
 }
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";

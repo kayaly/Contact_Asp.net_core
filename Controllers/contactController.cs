@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Contact.Data;
+
 using Contact.Models;
-using Contact.Models.ContactViewModel;
 
 using System.Text.RegularExpressions;
 using Contact.Pages;
+using System.Collections;
 
 namespace Contact.Controllers
 {
@@ -24,21 +25,140 @@ namespace Contact.Controllers
             _context = context;
         }
 
-
-
         // GET: contact
+        // public void Sorting(int FirstSorting, int SecondSorting, int ThirdSorting, IEnumerable<ContactViewModel> contacts)
+        // {
+        //     ContactViewModel contact = new ContactViewModel();
+        //     string[] array = { "", contact.Name, contact.Email, contact.Message, contact.Phone, contact.departementName };
+
+
+        //     contacts = contacts.OrderBy(l => array[FirstSorting]).ThenBy().ThenBy();
+        //     if (FirstSorting != null)
+        //     {
+        //         contacts = contacts.OrderBy(l => array[FirstSorting]);
+        //         switch (SecondSorting)
+        //         {
+        //             case 1:
+        //                 contacts = contacts.OrderBy(l => l.Name).ThenBy)();
+        //                 switch (ThirdSorting)
+        //                 {
+
+        //                     case 2:
+        //                         contacts = contacts.OrderBy(l => l.Name).ThenBy(l => l.Email);
+
+        //                         break;
+        //                     case 3:
+        //                         contacts = contacts.OrderBy(l => l.Name).ThenBy(l => l.Message);
+        //                         break;
+        //                     case 4:
+        //                         contacts = contacts.OrderBy(l => l.Name).ThenBy(l => l.Phone);
+        //                         break;
+        //                     case 5:
+        //                         contacts = contacts.OrderBy(l => l.Name).ThenBy(l => l.departementName);
+        //                         break;
+        //                 }
+        //                 break;
+        //         }
+        //     }
+
+        // }
+
+        public IQueryable<ContactViewModel> CustomSorting(int NumSorting, int levelSorting, IQueryable<ContactViewModel> contacts)
+        {
+
+
+            switch (NumSorting)
+            {
+                case 1:
+                    if (levelSorting == 1)
+                    {
+                        contacts = contacts.OrderBy(x => x.Name);
+                        return contacts;
+                    }
+
+                    else
+                    {
+                        contacts = ((IOrderedQueryable<ContactViewModel>)contacts).ThenBy(x => x.Name);
+                        return contacts;
+                    }
+
+                case 2:
+                    if (levelSorting == 1)
+                    {
+                        contacts = contacts.OrderBy(x => x.Email);
+                        return contacts;
+                    }
+
+                    else
+                    {
+                        contacts = ((IOrderedQueryable<ContactViewModel>)contacts).ThenBy(x => x.Email);
+                        return contacts;
+                    }
+
+                case 3:
+                    if (levelSorting == 1)
+                    {
+                        contacts = contacts.OrderBy(x => x.Message);
+                        return contacts;
+                    }
+
+                    else
+                    {
+                        contacts = ((IOrderedQueryable<ContactViewModel>)contacts).ThenBy(x => x.Message);
+                        return contacts;
+                    }
+
+                case 4:
+                    if (levelSorting == 1)
+                    {
+                        contacts = contacts.OrderBy(x => x.Phone);
+                        return contacts;
+                    }
+
+                    else
+                    {
+                        contacts = ((IOrderedQueryable<ContactViewModel>)contacts).ThenBy(x => x.Phone);
+                        return contacts;
+                    }
+
+                case 5:
+                    if (levelSorting == 1)
+                    {
+                        contacts = contacts.OrderBy(x => x.departementName);
+                        return contacts;
+                    }
+
+                    else
+                    {
+                        contacts = ((IOrderedQueryable<ContactViewModel>)contacts).ThenBy(x => x.departementName);
+                        return contacts;
+                    }
+
+
+
+            }
+            return contacts;
+        }
+
+
+
         public async Task<IActionResult> Index(string Serching
         , bool sensitive,
           int? pageNumber,
-          string sortOrder)
+          string sortOrder,
+          int FirstSorting,
+          int SecondSorting,
+          int ThirdSorting)
         {
-                  int pageSize = 3;
+            int pageSize = 30;
+
 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PhoneSortParm"] = sortOrder == "Phone" ? "Phone_desc" : "Phone";
             ViewData["EmailSortParm"] = sortOrder == "Email" ? "Email_desc" : "Email";
             ViewData["MessageSortParm"] = sortOrder == "Message" ? "Message_desc" : "Message";
             ViewData["departementSortParm"] = sortOrder == "departement" ? "departement_desc" : "departement";
+
 
 
             var contacts = from c in _context.contact
@@ -53,45 +173,14 @@ namespace Contact.Controllers
                                Message = c.Message,
                                departementName = d.Name
 
+
                            };
 
 
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    contacts = contacts.OrderByDescending(l => l.Name);
-
-                    break;
-                case "Phone":
-                    contacts = contacts.OrderBy(l => l.Phone);
-                    break;
-                case "Phone_desc":
-                    contacts = contacts.OrderByDescending(l => l.Phone);
-                    break;
-                case "Email":
-                    contacts = contacts.OrderBy(l => l.Email);
-                    break;
-                case "Email_desc":
-                    contacts = contacts.OrderByDescending(l => l.Email);
-                    break;
-                case "Message":
-                    contacts = contacts.OrderBy(l => l.Message);
-                    break;
-                case "Message_desc":
-                    contacts = contacts.OrderByDescending(l => l.Message);
-                    break;
-                case "departement":
-                    contacts = contacts.OrderBy(l => l.departementName);
-                    break;
-                case "departement_desc":
-                    contacts = contacts.OrderByDescending(l => l.departementName);
-                    break;
-                default:
-                    contacts = contacts.OrderBy(l => l.Name);
-                    break;
-            }
-
+                            
+            contacts = CustomSorting(FirstSorting, 1, contacts);
+            contacts = CustomSorting(SecondSorting, 2, contacts);
+            contacts = CustomSorting(ThirdSorting, 3, contacts);
 
 
             if (!string.IsNullOrEmpty(Serching))
@@ -102,45 +191,19 @@ namespace Contact.Controllers
                     Serching = Serching.ToLower();
                 }
 
-        return View(PaginatedList<ContactViewModel>.Create(contacts.Where(x =>
-                x.Name.Contains(Serching) ||
-                x.Email.Contains(Serching) ||
-                x.Phone.Contains(Serching) ||
-                x.Message.Contains(Serching)), pageNumber ?? 1, pageSize));
-                
+                return View(PaginatedList<ContactViewModel>.Create(contacts.Where(x =>
+                        x.Name.Contains(Serching) ||
+                        x.Email.Contains(Serching) ||
+                        x.Phone.Contains(Serching) ||
+                        x.Message.Contains(Serching)), pageNumber ?? 1, pageSize));
+
             }
-
-          
-
             return View(PaginatedList<ContactViewModel>.Create(contacts, pageNumber ?? 1, pageSize));
 
         }
 
 
-        // public List<ContactViewModel> FillContactViewmodel(IQueryable<contact> IQ)
-        // {
 
-
-
-        //     List<ContactViewModel> liContactView = new List<ContactViewModel>();
-
-        //     foreach (contact x in IQ)
-        //     {
-        //         ContactViewModel contactview = new ContactViewModel();
-        //         contactview.Name = x.Name;
-        //         contactview.Email = x.Email;
-        //         contactview.Phone = x.Phone;
-        //         contactview.Message = x.Message;
-        //         contactview.departementName = x.departement.;
-        //         contactview.id = x.id;
-        //         contactview.DepartementId = x.DepartementId;
-
-
-        //         liContactView.Add(contactview);
-        //     }
-
-        //     return liContactView;
-        // }
 
         // GET: contact/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -191,21 +254,23 @@ namespace Contact.Controllers
                 return View();
             }
 
-            contact.Email = contact.Email.ToLower();
-            var Contact = _context.contact.FirstOrDefault(a => a.Email == contact.Email);
 
-            if (Contact != null)
-            {
+            //contact.Email = contact.Email.ToLower();
 
-                ModelState.AddModelError(string.Empty, "Email already exists");
-                Create();
-                return View();
+            // var Contact = _context.contact.FirstOrDefault(a => a.Email == contact.Email);
 
-            }
+            // if (Contact != null)
+            // {
+
+            //     ModelState.AddModelError(string.Empty, "Email already exists");
+            //     Create();
+            //     return View();
+
+            // }
 
             else if (ModelState.IsValid)
             {
-
+                contact.Email = contact.Email.ToLower();
                 _context.Add(contact);
                 await _context.SaveChangesAsync();
 
@@ -225,7 +290,7 @@ namespace Contact.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.contact.FindAsync(id);
+            var contact = _context.contact.FindAsync(id);
             if (contact == null)
             {
                 return NotFound();
@@ -238,7 +303,7 @@ namespace Contact.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Name,Email,Phone,Message")] contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("id,Name,Email,Phone,Message,DepartementId")] contact contact)
         {
             if (id != contact.id)
             {

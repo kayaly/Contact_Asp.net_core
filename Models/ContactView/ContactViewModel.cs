@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Contact.Models.ContactViewModel
+namespace Contact.Models
 {
     public class ContactViewModel
     {
